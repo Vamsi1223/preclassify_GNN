@@ -165,20 +165,21 @@ class SFCM(FCM):
 
     def fit(self, X, spatial_data):
         self.spatial_data = spatial_data
+        if self.spatial_data is not None and len(self.spatial_data.shape) != 2:
+            self.spatial_data = self.spatial_data.reshape(-1, 1)  # Reshape spatial data to make it 2D if needed
         return super().fit(X)
-
-    def next_u(self, X, centers):
-        return self._predict(X, centers)
 
     def _predict(self, X, centers):
         power = float(2 / (self.m - 1))
         temp = cdist(X, centers) ** power
-        spatial_temp = cdist(self.spatial_data, self.spatial_data)
-        spatial_factor = np.exp(-self.spatial_factor * spatial_temp)
-        temp = temp * spatial_factor
+        if self.spatial_data is not None:
+            spatial_temp = cdist(self.spatial_data, self.spatial_data)
+            spatial_factor = np.exp(-self.spatial_factor * spatial_temp)
+            temp = temp * spatial_factor
         denominator_ = temp.reshape((X.shape[0], 1, -1)).repeat(temp.shape[-1], axis=1)
         denominator_ = temp[:, :, np.newaxis] / denominator_
         return 1 / denominator_.sum(2)
+
 
 # Example usage:
 # Assuming you have pix_vec and im_di defined elsewhere
