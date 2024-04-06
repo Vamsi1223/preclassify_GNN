@@ -60,7 +60,7 @@ def dicomp(im1, im2):
 # pixels with high probability to be changed are labeled 2
 # pixels with uncertainty are labeled 1.5
 
-def hcluster(pix_vec, im_di, spatial_data):
+def hcluster(pix_vec, im_di):
 #     print('... ... 1st round clustering ... ...')
     fcm = SFCM(n_clusters=2)
     fcm.fit(pix_vec, spatial_data=pix_vec)  # You may need to provide spatial data here
