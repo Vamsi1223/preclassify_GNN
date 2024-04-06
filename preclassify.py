@@ -182,5 +182,5 @@ class SFCM(FCM):
 
 # Example usage:
 # Assuming you have pix_vec and im_di defined elsewhere
-# res_lab = hcluster(pix_vec, im_di)
+# res_lab = hcluster(pix_vec, im_di, pix_vec)
 
