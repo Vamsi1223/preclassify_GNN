@@ -158,15 +158,24 @@ class FCM:
         u = self._predict(X, self.centers)
         return np.argmax(u, axis=-1)
 
-class SFCM(FCM):
+# import numpy as np
+# from scipy.spatial.distance import cdist
+
+class SFCM:
     def __init__(self, n_clusters=10, max_iter=150, m=2, error=1e-5, random_state=42, spatial_factor=0.5):
-        super().__init__(n_clusters, max_iter, m, error, random_state)
+        self.n_clusters = n_clusters
+        self.max_iter = max_iter
+        self.m = m
+        self.error = error
+        self.random_state = random_state
         self.spatial_factor = spatial_factor
 
     def fit(self, X, spatial_data):
         self.spatial_data = spatial_data
-        return super().fit(X)
-
+        if self.spatial_data is not None and len(self.spatial_data.shape) != 2:
+            self.spatial_data = self.spatial_data.reshape(-1, 1)  # Reshape spatial data to make it 2D if needed
+        return self._fit(X)
+        
     def next_u(self, X, centers):
         return self._predict(X, centers)
 
